@@ -1,0 +1,1 @@
+"ChessConfuser Chrome Extension" 
