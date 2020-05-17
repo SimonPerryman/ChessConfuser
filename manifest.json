@@ -2,16 +2,29 @@
   "manifest_version": 2,
   "name": "Chess Confuser",
   "version": "1.0",
-
-
+  "description": "Visually scrambles your chess board on chess.com",
+  "author": "Simon Perryman",
+  "homepage_url": "https://github.com/SimonPerryman/FYP",
+  "permissions": ["tabs", "storage"],
   "content_scripts": [
     {
-      "matches": ["*://www.chess.com/*"],
-      "js": ["chessConfuser.js"]
+      "matches": [
+        "http://www.chess.com/live?#g*",
+        "https://www.chess.com/live?#g*",
+        "http://www.chess.com/play/computer*",
+        "https://www.chess.com/play/computer*",
+        "http://www.chess.com/analysis",
+        "https://www.chess.com/analysis*"
+      ],
+      "js": ["content.js"]
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_icon": "logo.png",
+    "default_popup": "settings/menu.html",
+    "default_title": "Chess Confuser\nClick to open the settings menu"
+  }
 }
-
-// https://www.chess.com/live?#g=4868258629
-// analysis but not with /game
-// play/computer
