@@ -17,7 +17,6 @@ const backgroundImageSwap = (piece1, piece2) => {
  * @param {array} pieces 
  * @param {int} numberOfRandomisations 
  * @param {int} colour
- * @returns {void} 
  */
 const randomisePieces = (pieces, numberOfRandomisations, colour) => {
   sideCorrection = colour == 1 ? 16 : 0;
@@ -32,11 +31,32 @@ const randomisePieces = (pieces, numberOfRandomisations, colour) => {
 }
 
 /**
- * Main Function - visually scrambles the board to confuse the player.
+ * legalMoveRemover - removes the legal move hints
+ */
+const legalMoveRemover = () => {
+  let legalMoves = document.getElementsByClassName("legal-move-hint");
+  let legalMovesLength = legalMoves.length;
+  if(legalMoves && legalMovesLength > 0) {
+    for(var i = 0; i < legalMovesLength; i++) {
+      legalMoves[0].parentNode.removeChild(legalMoves[0]);
+    }
+  }
+}
+
+/**
+ * Adds event listeners to check when a piece is clicked to remove
+ * the legal move hints.
+ */
+const legalMovesOff = () => {
+  document.getElementsByClassName("board")[0].addEventListener('mousedown', legalMoveRemover);
+  document.getElementsByClassName("board")[0].addEventListener('click', legalMoveRemover);
+}
+
+/**
+ * chessConfuser (Main Function) - visually scrambles the board to confuse the player.
  * @param {object} settings 
  */
-const chessConfuser = settings => {
-  if(settings.chessConfuser) {
+const chessConfuser = () => {
     const pieces = document.getElementsByClassName("pieces")[0];
     const children = pieces.children;
     let numberOfRandomisations = 15;
@@ -46,7 +66,6 @@ const chessConfuser = settings => {
   
     //Randomise blacks pieces
     randomisePieces(children, 15, 1);
-  }
 }
 
 /**
@@ -96,15 +115,33 @@ const reset = () => {
 }
 
 /**
+ * Checks if the user has the extension turned on, and if so,
+ * visually scrambles the board.
+ * @param {object} settings 
+ */
+const checkIfOn = settings => {
+  if(settings.chessConfuser) {
+    chessConfuser();
+    legalMovesOff();
+  }
+}
+
+/**
  * Adds a listener to listen for settings changes
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if(!request.chessConfuser) {
-    reset();
+  console.log(request);
+  switch(request) {
+    case 0:
+      chessConfuser();
+      break;
+    case 1:
+      reset();
+      break;
   }
 });
 
 /**
  * Gets settings then runs the main function
  */
-chrome.storage.sync.get('chessConfuser', chessConfuser);
+chrome.storage.sync.get('chessConfuser', checkIfOn);
