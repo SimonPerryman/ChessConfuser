@@ -1,3 +1,7 @@
+chrome.storage.sync.get(['chessConfuser'], result => {
+  document.getElementById("toggleChessConfuser").checked = result.chessConfuser;
+});
+
 document.getElementById("toggleChessConfuser").addEventListener('change', event => {
   let value = document.getElementById("toggleChessConfuser").checked;
 
