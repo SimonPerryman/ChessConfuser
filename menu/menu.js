@@ -49,7 +49,6 @@ const sendMessage = payload => {
   chrome.tabs.query(params, tabs => {
     chrome.tabs.sendMessage(tabs[0].id, payload);
   });
-
 }
 
 /**
@@ -89,7 +88,6 @@ document.getElementById("chessConfuser").addEventListener('change', event => {
   let value = document.getElementById("chessConfuser").checked;
 
   sendMessage(value == true ? null : 1);
-
 });
 
 /**
