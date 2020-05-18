@@ -53,19 +53,36 @@ const legalMovesOff = () => {
 }
 
 /**
+ * Removes event listeners to check when a piece is clicked, therefore
+ * turning legal moves back on.
+ */
+const legalMovesOn = () => {
+  document.getElementsByClassName("board")[0].removeEventListener('mousedown', legalMoveRemover);
+  document.getElementsByClassName("board")[0].removeEventListener('click', legalMoveRemover);
+}
+
+/**
  * chessConfuser (Main Function) - visually scrambles the board to confuse the player.
  * @param {object} settings 
  */
-const chessConfuser = () => {
+const chessConfuser = (settings) => {
     const pieces = document.getElementsByClassName("pieces")[0];
     const children = pieces.children;
-    let numberOfRandomisations = 15;
+    let numberOfRandomisations = settings.amountOfRotations;
   
     //Randomise whites pieces
-    randomisePieces(children, 15, 0);
+    if(settings.whitePiecesToggle) {
+      randomisePieces(children, numberOfRandomisations, 0);
+    }
   
     //Randomise blacks pieces
-    randomisePieces(children, 15, 1);
+    if(settings.blackPiecesToggle) {
+      randomisePieces(children, numberOfRandomisations, 1);
+    }
+
+    if(!settings.moveHelper) {
+      legalMovesOff();
+    }
 }
 
 /**
@@ -119,10 +136,29 @@ const reset = () => {
  * visually scrambles the board.
  * @param {object} settings 
  */
-const checkIfOn = settings => {
+const checkIfOn = storage => {
+  let settings = storage.settings;
+
+  //Check if this is the first time loading the extension, and if so set
+  // the default settings
+  if(Object.keys(storage).length === 0 && storage.constructor === Object) {
+    settings = {
+        "chessConfuser": true,
+        "amountOfRotations": 15,
+        "whitePiecesToggle": true,
+        "blackPiecesToggle": true,
+        "moveHelper": true,
+        "sneakyMode": false,
+        "constantRotations": false,
+        "kingAndQueen": false
+    }
+
+    chrome.storage.sync.set({'settings': settings}, () => {
+      console.log("No settings found, used and saved default settings");
+    });
+  }
   if(settings.chessConfuser) {
-    chessConfuser();
-    legalMovesOff();
+    chessConfuser(settings);
   }
 }
 
@@ -130,13 +166,18 @@ const checkIfOn = settings => {
  * Adds a listener to listen for settings changes
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request);
   switch(request) {
     case 0:
-      chessConfuser();
+      main();
       break;
     case 1:
       reset();
+      break;
+    case 2:
+      legalMovesOn();
+      break;
+    case 3:
+      legalMovesOff();
       break;
   }
 });
@@ -144,4 +185,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 /**
  * Gets settings then runs the main function
  */
-chrome.storage.sync.get('chessConfuser', checkIfOn);
+const main = () => {
+  chrome.storage.sync.get('settings', checkIfOn);
+}
+
+main();

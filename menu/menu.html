@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="menu.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <span>Settings</span>
+      </div>
+      <div class="scramble-pieces">
+        <input id="scrambler" type=button value="Scramble The Pieces">
+        <input id="reset" type=button value="Reset the Pieces">
+      </div>
+      <div id="settingsMenu" class="settings-menu">
+        <span class="settings-option">
+          Chess Confuser <input id="chessConfuser" type="checkbox">
+        </span>
+        <span class="settings-option">
+          Amount of Rotations <span class="rotations-slider" id="amountOfRotations"></span>
+          <input id="amountOfRotationsSlider" type="range" min="1" max="30" value="15">
+          
+        </span>
+        <span class="settings-option">
+          White Rotation <input id="whitePiecesToggle" type="checkbox">
+        </span>
+        <span class="settings-option">
+          Black Rotation <input id="blackPiecesToggle" type="checkbox">
+        </span>
+        <span class="settings-option">
+          move helper <input id="moveHelper" type="checkbox">
+        </span>
+        <span class="settings-option">
+          Sneaky Mode <input id="sneakyMode" type="checkbox">
+        </span>
+        <span class="settings-option">
+          Constant Rotations <input id="constantRotations" type="checkbox">
+        </span>
+        <span class="settings-option">
+          Kings And Queens Rotated <input id="kingAndQueen" type="checkbox">
+        </span>
+      </div>
+      <div class="footer"></div>
+    </div>
+    
+    <!--Credit to https://codepen.io/mburnette/pen/LxNxNg-->
+
+  </body>
+  <script src="menu.js"></script> 
+</html>
