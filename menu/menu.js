@@ -10,7 +10,7 @@ chrome.storage.sync.get(['settings'], storage => {
   if(Object.keys(storage).length === 0 && storage.constructor === Object) {
     settings = {
         "chessConfuser": true,
-        "amountOfRotations": 15,
+        "numberOfRotations": 15,
         "whitePiecesToggle": true,
         "blackPiecesToggle": true,
         "moveHelper": true,
@@ -25,8 +25,8 @@ chrome.storage.sync.get(['settings'], storage => {
   }
 
   document.getElementById("chessConfuser").checked = settings.chessConfuser;
-  document.getElementById("amountOfRotationsSlider").value = settings.amountOfRotations;
-  document.getElementById("amountOfRotations").innerHTML = settings.amountOfRotations;
+  document.getElementById("numberOfRotationsSlider").value = settings.numberOfRotations;
+  document.getElementById("numberOfRotations").innerHTML = settings.numberOfRotations;
   document.getElementById("whitePiecesToggle").checked = settings.whitePiecesToggle;
   document.getElementById("blackPiecesToggle").checked = settings.blackPiecesToggle;
   document.getElementById("moveHelper").checked = settings.moveHelper;
@@ -52,11 +52,11 @@ const sendMessage = payload => {
 }
 
 /**
- * Listener to dynamically update the amount of rotations slider
+ * Listener to dynamically update the number of rotations slider
  */
-document.getElementById("amountOfRotationsSlider").addEventListener('input', event => {
-  document.getElementById("amountOfRotations").innerHTML =
-    document.getElementById("amountOfRotationsSlider").value;
+document.getElementById("numberOfRotationsSlider").addEventListener('input', event => {
+  document.getElementById("numberOfRotations").innerHTML =
+    document.getElementById("numberOfRotationsSlider").value;
 })
 
 /**
@@ -65,7 +65,7 @@ document.getElementById("amountOfRotationsSlider").addEventListener('input', eve
 document.getElementById("settingsMenu").addEventListener('change', event => {
   const settings = {
     "chessConfuser": document.getElementById("chessConfuser").checked,
-    "amountOfRotations": document.getElementById("amountOfRotationsSlider").value,
+    "numberOfRotations": document.getElementById("numberOfRotationsSlider").value,
     "whitePiecesToggle": document.getElementById("whitePiecesToggle").checked,
     "blackPiecesToggle": document.getElementById("blackPiecesToggle").checked,
     "moveHelper": document.getElementById("moveHelper").checked,
@@ -76,7 +76,6 @@ document.getElementById("settingsMenu").addEventListener('change', event => {
 
   chrome.storage.sync.set({'settings': settings}, () => {
     console.log("Updated user settings");
-    console.log(settings);
   })
 });
 
