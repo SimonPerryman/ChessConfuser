@@ -19,13 +19,16 @@ const backgroundImageSwap = (piece1, piece2) => {
  * @param {int} colour
  */
 const randomisePieces = (pieces, numberOfRandomisations, colour) => {
-  sideCorrection = colour == 1 ? 16 : 0;
+  let sideCorrection = colour == 1 ? 16 : 0;
+
   while(numberOfRandomisations > 0) {
     
     let position1 = sideCorrection + Math.floor(Math.random() * 16);
     let position2 = sideCorrection + Math.floor(Math.random() * 16);
 
-    pieces[position1], pieces[position2] = backgroundImageSwap(pieces[position1], pieces[position2]);
+    if(pieces[position1] !== undefined && pieces[position2] !== undefined) {
+      pieces[position1], pieces[position2] = backgroundImageSwap(pieces[position1], pieces[position2]);
+    }
     numberOfRandomisations--;
   }
 }
@@ -68,7 +71,7 @@ const legalMovesOn = () => {
 const chessConfuser = (settings) => {
     const pieces = document.getElementsByClassName("pieces")[0];
     const children = pieces.children;
-    let numberOfRandomisations = settings.amountOfRotations;
+    let numberOfRandomisations = settings.numberOfRotations;
   
     //Randomise whites pieces
     if(settings.whitePiecesToggle) {
@@ -144,7 +147,7 @@ const checkIfOn = storage => {
   if(Object.keys(storage).length === 0 && storage.constructor === Object) {
     settings = {
         "chessConfuser": true,
-        "amountOfRotations": 15,
+        "numberOfRotations": 15,
         "whitePiecesToggle": true,
         "blackPiecesToggle": true,
         "moveHelper": true,
@@ -166,6 +169,7 @@ const checkIfOn = storage => {
  * Adds a listener to listen for settings changes
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log(request);
   switch(request) {
     case 0:
       main();

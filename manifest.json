@@ -9,12 +9,16 @@
   "content_scripts": [
     {
       "matches": [
-        "http://www.chess.com/live?#g*",
-        "https://www.chess.com/live?#g*",
+        "http://www.chess.com/live*",
+        "https://www.chess.com/live*",
         "http://www.chess.com/play/computer*",
         "https://www.chess.com/play/computer*",
         "http://www.chess.com/analysis",
-        "https://www.chess.com/analysis*"
+        "https://www.chess.com/analysis"
+      ],
+      "exclude_matches": [
+        "*://www.chess.com/live/game*",
+        "*://www.chess.com/live#a*"
       ],
       "js": ["content.js"]
     }

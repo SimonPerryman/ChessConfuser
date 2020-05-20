@@ -2,44 +2,114 @@
   <head>
     <link rel="stylesheet" type="text/css" href="menu.css">
   </head>
-  <body>
-    <div class="container">
+  <body class="container">
       <div class="header">
-        <span>Settings</span>
+        <img src="../logo.png" class="logo" title="Chess Confuser"></img>
+        <h1 class="title">Chess Confuser</h1>
       </div>
       <div class="scramble-pieces">
-        <input id="scrambler" type=button value="Scramble The Pieces">
-        <input id="reset" type=button value="Reset the Pieces">
+        <button id="scrambler" class="scrambler" title="Scramble the chess pieces." >Scramble</button>
+        <input id="reset" class="reset" type=button value="Reset" title="Reset the chess pieces.">
       </div>
-      <div id="settingsMenu" class="settings-menu">
-        <span class="settings-option">
-          Chess Confuser <input id="chessConfuser" type="checkbox">
-        </span>
-        <span class="settings-option">
-          Amount of Rotations <span class="rotations-slider" id="amountOfRotations"></span>
-          <input id="amountOfRotationsSlider" type="range" min="1" max="30" value="15"> 
-        </span>
-        <span class="settings-option">
-          White Rotation <input id="whitePiecesToggle" type="checkbox">
-        </span>
-        <span class="settings-option">
-          Black Rotation <input id="blackPiecesToggle" type="checkbox">
-        </span>
-        <span class="settings-option">
-          move helper <input id="moveHelper" type="checkbox">
-        </span>
-        <span class="settings-option">
-          Sneaky Mode <input id="sneakyMode" type="checkbox">
-        </span>
-        <span class="settings-option">
-          Constant Rotations <input id="constantRotations" type="checkbox">
-        </span>
-        <span class="settings-option">
-          Kings And Queens Rotated <input id="kingAndQueen" type="checkbox">
-        </span>
+      <ul id="settingsMenu" class="settings-menu">
+        <li class="settings-option" title="Toggle the chess confuser extension.">
+            <p class="setting">
+              Chess Confuser
+            </p>
+          <div class="toggle">
+            <input id="chessConfuser" type="checkbox">
+            <label for="chessConfuser"></label>
+          </div>
+        </li>
+        <li class="settings-option" title="Number of rotations (scrambles) that should occur.">
+          <p class="setting">
+            Number of Rotations:
+          </p>
+          <p id="numberOfRotations" class="number-of-rotations"></p>
+        </li>
+        <li class="settings-option slider">
+          <p class="minimum-rotations">1</p>
+          <input id="numberOfRotationsSlider" class="number-of-rotations-slider" type="range" min="1" max="30" value="15">
+          <p class="maximum-rotations">30</p>
+        </li>
+        <li class="settings-option" title="Toggle whether you want to scramble the white pieces.">
+          <p class="setting">
+            White Rotation
+          </p>
+          <div class="toggle">
+            <input id="whitePiecesToggle" type="checkbox">
+            <label for="whitePiecesToggle"></label>
+          </div>
+        </li>
+        <li class="settings-option" title="Toggle whether you want to scramble the black pieces.">
+          <p class="setting">
+            Black Rotation
+          </p>
+          <div class="toggle">
+            <input id="blackPiecesToggle" type="checkbox">
+            <label for="blackPiecesToggle"></label>
+          </div>
+        </li>
+        <li class="settings-option" title="Toggle the legal move helper">
+          <p class="setting">
+            Legal Move Helper
+          </p>
+          <div class="toggle">
+            <input id="moveHelper" type="checkbox">
+            <label for="moveHelper"></label>
+          </div>
+        </li>
+        <li class="settings-option wip" title="Work in progress - released in future versions">
+          <p class="setting">
+            Sneaky Mode
+          </p>
+          <div class="toggle">
+            <input id="sneakyMode" type="checkbox" disabled="disabled">
+            <label for="sneakyMode"></label>
+          </div>
+        </li>
+        <li class="settings-option wip" title="Work in progress - released in future versions"> 
+          <p class="setting">
+            Constant Rotations
+          </p>
+          <div class="toggle">
+            <input id="constantRotations" type="checkbox" disabled="disabled">
+            <label for="constantRotations"></label>
+          </div>
+        </li>
+        <li class="settings-option wip" title="Work in progress - released in future versions">
+          <p class="setting">
+            Kings And Queens Rotated
+          </p>
+          <div class="toggle">
+            <input id="kingAndQueen" type="checkbox" disabled="disabled">
+            <label for="kingAndQueen"></label>
+          </div>
+        </li>
+        <li class="settings-option wip" title="Work in progress - released in future versions">
+          <p class="setting">
+            Distractions
+          </p>
+          <div class="toggle">
+            <input id="distractions" type="checkbox" disabled="disabled">
+            <label for="distractions"></label>
+          </div>
+        </li>
+      </ul>
+      <div class="footer">
+        <p class="author" title="Extension created by Simon Perryman - please enjoy!">
+          Simon Perryman
+        </p>
+        <a href="https://github.com/SimonPerryman/ChessConfuser/" target="_blank" class="link">
+          <img src="./icons/GitHubIcon.png" class="image-link" title="Chess Confuser's GitHub page" alt="Chess Confuser's GitHub page">
+        </a>
+        <a href="https://github.com/SimonPerryman/ChessConfuser/" target="_blank" class="link">
+          <img src="./icons/ChessComIcon.png" class="image-link" title="Chess.com profile" alt="Chess.com profile">
+        </a>
+        <a href="mailto:chessconfuser@gmail.com" target="_blank" class="link">
+          <img src="./icons/GmailIcon.png" class="image-link" title="Contact me via email" alt="Contact me via email">
+        </a>
       </div>
-      <div class="footer"></div>
-    </div>
   </body>
   <script src="menu.js"></script> 
 </html>
