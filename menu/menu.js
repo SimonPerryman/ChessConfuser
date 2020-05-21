@@ -16,7 +16,8 @@ chrome.storage.sync.get(['settings'], storage => {
         "moveHelper": true,
         "sneakyMode": false,
         "constantRotations": false,
-        "kingAndQueen": false
+        "kingAndQueen": false,
+        "distractions": false
     }
 
     chrome.storage.sync.set({'settings': settings}, () => {
@@ -71,7 +72,8 @@ document.getElementById("settingsMenu").addEventListener('change', event => {
     "moveHelper": document.getElementById("moveHelper").checked,
     "sneakyMode": document.getElementById("sneakyMode").checked,
     "constantRotations": document.getElementById("constantRotations").checked,
-    "kingAndQueen": document.getElementById("kingAndQueen").checked
+    "kingAndQueen": document.getElementById("kingAndQueen").checked,
+    "distractions": document.getElementById("distractions").checked
   }
 
   chrome.storage.sync.set({'settings': settings}, () => {
