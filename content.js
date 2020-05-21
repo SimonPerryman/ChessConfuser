@@ -1,5 +1,6 @@
 /**
  * backgroundImageSwap - swaps the background image of two chess pieces
+ * on all paths aside from the /play/computer path.
  * @param {object} child1
  * @param {object} child2
  * @returns {object, object} child1, child2
@@ -12,19 +13,36 @@ const backgroundImageSwap = (piece1, piece2) => {
 }
 
 /**
+ * imgSrcSwap - swaps the image source (background image) of two chess
+ * pieces on the /play/computer path.
+ * @param {object} piece1 
+ * @param {object} piece2 
+ */
+const imgSrcSwap = (piece1, piece2) => {
+  temp = piece1.src;
+  piece1.src = piece2.src;
+  piece2.src = temp;
+  return piece1, piece2;
+}
+
+/**
  * randomisePieces - randomises the background image of a sides pieces
- * by switching two randomly selected's pieces background images.
+ * by switching two randomly selected's pieces background images or sources,
+ * depending on the url path.
  * @param {array} pieces 
  * @param {int} numberOfRandomisations 
  */
 const randomisePieces = (pieces, numberOfRandomisations) => {
-  if(pieces == undefined || pieces.length < 2) return;
+  let length = pieces.length;
+  if(pieces == undefined || length < 2) return;
   while(numberOfRandomisations > 0) {
     
-    let position1 = Math.floor(Math.random() * 16);
-    let position2 = Math.floor(Math.random() * 16);
+    let position1 = Math.floor(Math.random() * length);
+    let position2 = Math.floor(Math.random() * length);
 
-    if(pieces[position1] !== undefined && pieces[position2] !== undefined) {
+    if(location.pathname == "/play/computer") {
+      pieces[position1], pieces[position2] = imgSrcSwap(pieces[position1], pieces[position2]);
+    } else {
       pieces[position1], pieces[position2] = backgroundImageSwap(pieces[position1], pieces[position2]);
     }
     numberOfRandomisations--;
@@ -63,12 +81,64 @@ const legalMovesOn = () => {
 }
 
 /**
- * assignPieceId - assigns each piece its id in order to note what the actual piece is.
+ * getPieceId - gets the pieceId for all paths that aren't /play/computer
+ * @param {int} id 
+ */
+const getPieceId = id => {
+    
+  switch(true) {
+    case (id == 1 || id == 8 || id == 25 || id == 32):
+      return 0;
+    case (id == 2 || id == 7 || id == 26 || id == 31):
+      return 1;
+    case (id == 3 || id == 6 || id == 27 || id == 30):
+      return 2;
+    case id == 4 || id == 28:
+      return 3;
+    case id == 5 || id == 29:
+      return 4;
+    case (id > 8 && id < 25):
+      return 5;
+  }
+}
+
+/**
+ * getPieceIdComputer - gets the pieceId for the /play/computer path
+ * @param {String} id 
+ */
+const getPieceIdComputer = id => {
+  switch(id) {
+    case "r":
+      return 0;
+    case "n":
+      return 1;
+    case "b":
+      return 2;
+    case "q":
+      return 3;
+    case "k":
+      return 4;
+    case "p":
+      return 5;
+  }
+}
+
+/**
+ * assignPieceInfo - assigns each piece its id in order to note what the actual piece is,
+ * as well as assigning the colour it belongs to.
  * @param {array} pieces 
  */
-const assignPieceId = pieces => {
+const assignPieceInfo = pieces => {
   for(piece of pieces) {
-    piece.pieceId = parseInt(piece.id.substring(6));
+    if(piece.id == "") {
+      let info = piece.src.slice(-6);
+      piece.colour = info.substring(0, 1) == "w" ? 0 : 1;
+      piece.pieceId = getPieceIdComputer(info.substring(1, 2));
+    } else {
+      let id = parseInt(piece.id.substring(6));
+      piece.colour = id < 17  ? 0 : 1;
+      piece.pieceId = getPieceId(id);
+    }
   }
   return pieces;
 }
@@ -82,7 +152,7 @@ const splitPieces = pieces => {
   const blackPieces = [];
 
   for(piece of pieces) {
-    piece.pieceId < 17 ? whitePieces.push(piece) : blackPieces.push(piece);
+    piece.colour == 0 ? whitePieces.push(piece) : blackPieces.push(piece);
   }
 
   return [whitePieces, blackPieces];
@@ -93,24 +163,28 @@ const splitPieces = pieces => {
  * @param {object} settings 
  */
 const chessConfuser = (settings) => {
-  let pieces = document.getElementsByClassName("pieces")[0];
-  const children = assignPieceId(pieces.children);
+  let pieces;
+  if(location.pathname == "/play/computer") {
+    pieces = document.getElementsByClassName("chess_com_piece");
+  } else {
+    pieces = document.getElementsByClassName("piece");
+  }
 
-  let numberOfRandomisations = settings.numberOfRotations;
+  pieces = assignPieceInfo(pieces);
 
   if(settings.whitePiecesToggle || settings.blackPiecesToggle) {
-    pieces = splitPieces(children);
+    pieces = splitPieces(pieces);
     const whitePieces = pieces[0];
     const blackPieces = pieces[1];
 
     //Randomise whites pieces
     if(settings.whitePiecesToggle) {
-      randomisePieces(whitePieces, numberOfRandomisations);
+      randomisePieces(whitePieces, settings.numberOfRotations);
     }
   
     //Randomise blacks pieces
     if(settings.blackPiecesToggle) {
-      randomisePieces(blackPieces, numberOfRandomisations);
+      randomisePieces(blackPieces, settings.numberOfRotations);
     }
   }
 
@@ -120,38 +194,38 @@ const chessConfuser = (settings) => {
   }
 }
 
+const getPieceLetter = id => {
+  switch(id) {
+    case 0:
+      return "r";
+    case 1:
+      return "n";
+    case 2:
+      return "b";
+    case 3:
+      return "q";
+    case 4:
+      return "k";
+    case 5:
+      return "p";
+  }
+}
+
 /**
  * Assigns the piece that is passed to the function its original image.
  * @param {object} piece 
  * @returns {object} piece
  */
 const getOriginalImage = piece => {
-  let value = parseInt(piece.id.substring(6));
-  let colour = "w";
-  let pieceLetter = "r";
-  if(value > 16) {
-    colour = "b";
-  }
+  const pieceLetter = getPieceLetter(piece.pieceId);
 
-  switch(true) {
-    case (value == 2 || value == 7 || value == 26 || value == 31):
-      pieceLetter = "n";
-      break;
-    case (value == 3 || value == 6 || value == 27 || value == 30):
-      pieceLetter = "b";
-      break;
-    case value == 4 || value == 28:
-      pieceLetter = "q";
-      break;
-    case value == 5 || value == 29:
-      pieceLetter = "k";
-      break;
-    case (value > 8 && value < 25):
-      pieceLetter = "p";
-      break;
+  const colour = piece.colour == 0 ? "w" : "b";
+  if(location.pathname == "/play/computer") {
+    piece.src = `${piece.src.slice(0, -6)}${colour}${pieceLetter}.png`
+  } else {
+    piece.style.backgroundImage = 
+      `${piece.style.backgroundImage.slice(0, -8)}${colour}${pieceLetter}.png")`;
   }
-  piece.style.backgroundImage = 
-    `url("//images.chesscomfiles.com/chess-themes/pieces/neo/150/${colour}${pieceLetter}.png")`
   
   return piece;
 }
@@ -160,8 +234,14 @@ const getOriginalImage = piece => {
  * Visually resets the board
  */
 const reset = () => {
-  const pieces = document.getElementsByClassName("pieces")[0];
-  for(piece of pieces.children) {
+  let pieces;
+  if(location.pathname == "/play/computer") {
+    pieces = document.getElementsByClassName("chess_com_piece");
+  } else {
+    pieces = document.getElementsByClassName("piece");
+  }
+
+  for(piece of pieces) {
     piece = getOriginalImage(piece)
   }
 }
@@ -201,7 +281,6 @@ const checkIfOn = storage => {
  * Adds a listener to listen for settings changes
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request);
   switch(request) {
     case 0:
       main();
