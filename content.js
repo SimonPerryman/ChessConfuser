@@ -265,7 +265,8 @@ const checkIfOn = storage => {
         "moveHelper": true,
         "sneakyMode": false,
         "constantRotations": false,
-        "kingAndQueen": false
+        "kingAndQueen": false,
+        "distractions": false
     }
 
     chrome.storage.sync.set({'settings': settings}, () => {
