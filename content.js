@@ -40,6 +40,11 @@ const randomisePieces = (pieces, numberOfRandomisations) => {
     let position1 = Math.floor(Math.random() * length);
     let position2 = Math.floor(Math.random() * length);
 
+    while(position1 == position2 || pieces[position1].pieceId == pieces[position2].pieceId) {
+      console.log(pieces[position2].pieceId);
+      position2 = Math.floor(Math.random() * length);
+    }
+    
     if(location.pathname == "/play/computer") {
       pieces[position1], pieces[position2] = imgSrcSwap(pieces[position1], pieces[position2]);
     } else {
