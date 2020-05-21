@@ -16,15 +16,13 @@ const backgroundImageSwap = (piece1, piece2) => {
  * by switching two randomly selected's pieces background images.
  * @param {array} pieces 
  * @param {int} numberOfRandomisations 
- * @param {int} colour
  */
-const randomisePieces = (pieces, numberOfRandomisations, colour) => {
-  let sideCorrection = colour == 1 ? 16 : 0;
-
+const randomisePieces = (pieces, numberOfRandomisations) => {
+  if(pieces == undefined || pieces.length < 2) return;
   while(numberOfRandomisations > 0) {
     
-    let position1 = sideCorrection + Math.floor(Math.random() * 16);
-    let position2 = sideCorrection + Math.floor(Math.random() * 16);
+    let position1 = Math.floor(Math.random() * 16);
+    let position2 = Math.floor(Math.random() * 16);
 
     if(pieces[position1] !== undefined && pieces[position2] !== undefined) {
       pieces[position1], pieces[position2] = backgroundImageSwap(pieces[position1], pieces[position2]);
@@ -65,27 +63,61 @@ const legalMovesOn = () => {
 }
 
 /**
+ * assignPieceId - assigns each piece its id in order to note what the actual piece is.
+ * @param {array} pieces 
+ */
+const assignPieceId = pieces => {
+  for(piece of pieces) {
+    piece.pieceId = parseInt(piece.id.substring(6));
+  }
+  return pieces;
+}
+
+/**
+ * splitPieces - splits the pieces into black and white sides
+ * @param {array} pieces 
+ */
+const splitPieces = pieces => {
+  const whitePieces = [];
+  const blackPieces = [];
+
+  for(piece of pieces) {
+    piece.pieceId < 17 ? whitePieces.push(piece) : blackPieces.push(piece);
+  }
+
+  return [whitePieces, blackPieces];
+}
+
+/**
  * chessConfuser (Main Function) - visually scrambles the board to confuse the player.
  * @param {object} settings 
  */
 const chessConfuser = (settings) => {
-    const pieces = document.getElementsByClassName("pieces")[0];
-    const children = pieces.children;
-    let numberOfRandomisations = settings.numberOfRotations;
-  
+  let pieces = document.getElementsByClassName("pieces")[0];
+  const children = assignPieceId(pieces.children);
+
+  let numberOfRandomisations = settings.numberOfRotations;
+
+  if(settings.whitePiecesToggle || settings.blackPiecesToggle) {
+    pieces = splitPieces(children);
+    const whitePieces = pieces[0];
+    const blackPieces = pieces[1];
+
     //Randomise whites pieces
     if(settings.whitePiecesToggle) {
-      randomisePieces(children, numberOfRandomisations, 0);
+      randomisePieces(whitePieces, numberOfRandomisations);
     }
   
     //Randomise blacks pieces
     if(settings.blackPiecesToggle) {
-      randomisePieces(children, numberOfRandomisations, 1);
+      randomisePieces(blackPieces, numberOfRandomisations);
     }
+  }
 
-    if(!settings.moveHelper) {
-      legalMovesOff();
-    }
+
+  if(!settings.moveHelper) {
+    legalMovesOff();
+  }
 }
 
 /**
