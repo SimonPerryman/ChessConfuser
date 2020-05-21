@@ -41,7 +41,6 @@ const randomisePieces = (pieces, numberOfRandomisations) => {
     let position2 = Math.floor(Math.random() * length);
 
     while(position1 == position2 || pieces[position1].pieceId == pieces[position2].pieceId) {
-      console.log(pieces[position2].pieceId);
       position2 = Math.floor(Math.random() * length);
     }
     
