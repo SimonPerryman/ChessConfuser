@@ -34,6 +34,8 @@ chrome.storage.sync.get(['settings'], storage => {
   document.getElementById("sneakyMode").checked = settings.sneakyMode;
   document.getElementById("constantRotations").checked = settings.constantRotations;
   document.getElementById("kingAndQueen").checked = settings.kingAndQueen;
+  document.getElementById("bongcloud").checked = settings.bongcloud;
+  document.getElementById("distractions").checked = settings.distractions;
 });
 
 /**
@@ -73,6 +75,7 @@ document.getElementById("settingsMenu").addEventListener('change', event => {
     "sneakyMode": document.getElementById("sneakyMode").checked,
     "constantRotations": document.getElementById("constantRotations").checked,
     "kingAndQueen": document.getElementById("kingAndQueen").checked,
+    "bongcloud": document.getElementById("bongcloud").checked,
     "distractions": document.getElementById("distractions").checked
   }
 

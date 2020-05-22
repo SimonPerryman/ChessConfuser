@@ -53,6 +53,20 @@ const randomisePieces = (pieces, numberOfRandomisations) => {
   }
 }
 
+const bongcloud = pieces => {
+  let king, queen;
+  for(piece of pieces) {
+    if(piece.pieceId == 3) queen = piece;
+    else if (piece.pieceId == 4) king = piece;
+  }
+  
+  if(location.pathname == "/play/computer") {
+    queen, king = imgSrcSwap(queen, king);
+  } else {
+    queen, king = backgroundImageSwap(queen, king);
+  }
+}
+
 /**
  * legalMoveRemover - removes the legal move hints
  */
@@ -180,15 +194,19 @@ const chessConfuser = (settings) => {
     pieces = splitPieces(pieces);
     const whitePieces = pieces[0];
     const blackPieces = pieces[1];
+    
+    let gameMode;
+    if(settings.bongcloud) gameMode = bongcloud;
+    else gameMode = randomisePieces;
 
     //Randomise whites pieces
     if(settings.whitePiecesToggle) {
-      randomisePieces(whitePieces, settings.numberOfRotations);
+      gameMode(whitePieces, settings.numberOfRotations);
     }
   
     //Randomise blacks pieces
     if(settings.blackPiecesToggle) {
-      randomisePieces(blackPieces, settings.numberOfRotations);
+      gameMode(blackPieces, settings.numberOfRotations);
     }
   }
 
@@ -270,6 +288,7 @@ const checkIfOn = storage => {
         "sneakyMode": false,
         "constantRotations": false,
         "kingAndQueen": false,
+        "bongcloud": false,
         "distractions": false
     }
 
