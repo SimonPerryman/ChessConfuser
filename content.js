@@ -53,17 +53,22 @@ const randomisePieces = (pieces, numberOfRandomisations) => {
   }
 }
 
+/**
+ * bongcloud - bongcloud gamemode function, which switches the
+ * king and queen around.
+ * @param {Array} pieces 
+ */
 const bongcloud = pieces => {
   let king, queen;
   for(piece of pieces) {
     if(piece.pieceId == 3) queen = piece;
     else if (piece.pieceId == 4) king = piece;
   }
-  
+
   if(location.pathname == "/play/computer") {
-    queen, king = imgSrcSwap(queen, king);
+    king, queen = imgSrcSwap(king, queen);
   } else {
-    queen, king = backgroundImageSwap(queen, king);
+    king, queen = backgroundImageSwap(king, queen);
   }
 }
 
