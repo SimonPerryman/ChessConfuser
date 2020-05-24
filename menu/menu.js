@@ -39,6 +39,55 @@ chrome.storage.sync.get(['settings'], storage => {
 });
 
 /**
+ * getSettingsValues - returns all the values for each setting on the settings menu.
+ */
+const getSettingsValues = () => {
+  return {
+    "chessConfuser": document.getElementById("chessConfuser").checked,
+    "numberOfRotations": document.getElementById("numberOfRotationsSlider").value,
+    "whitePiecesToggle": document.getElementById("whitePiecesToggle").checked,
+    "blackPiecesToggle": document.getElementById("blackPiecesToggle").checked,
+    "moveHelper": document.getElementById("moveHelper").checked,
+    "sneakyMode": document.getElementById("sneakyMode").checked,
+    "constantRotations": document.getElementById("constantRotations").checked,
+    "kingAndQueen": document.getElementById("kingAndQueen").checked,
+    "bongcloud": document.getElementById("bongcloud").checked,
+    "distractions": document.getElementById("distractions").checked
+  }
+}
+
+/**
+ * setGamemode - turns all game modes off, then sets the game mode (that
+ * is passed through) to be on.
+ * @param {Element} gameMode 
+ */
+const setGameMode = gameMode => {
+  document.getElementById("sneakyMode").checked = false;
+  document.getElementById("constantRotations").checked = false;
+  document.getElementById("kingAndQueen").checked = false;
+  document.getElementById("bongcloud").checked = false;
+  document.getElementById("distractions").checked = false;
+
+  gameMode.checked = true;
+}
+
+/**
+ * isGameMode - checks if an element has the id of a gamemode.
+ * @param {Element} element 
+ */
+const isGameMode = element => {
+  const gameModes = [
+    "sneakyMode",
+    "constantRotations",
+    "kingAndQueen",
+    "bongcloud",
+    "distractions"
+  ];
+
+  return gameModes.includes(element.id);
+}
+
+/**
  * Sends a message to the content script
  * @param {int} payload 
  */
@@ -66,18 +115,11 @@ document.getElementById("numberOfRotationsSlider").addEventListener('input', eve
  * Adds an event listener to check for a change in user settings
  */
 document.getElementById("settingsMenu").addEventListener('change', event => {
-  const settings = {
-    "chessConfuser": document.getElementById("chessConfuser").checked,
-    "numberOfRotations": document.getElementById("numberOfRotationsSlider").value,
-    "whitePiecesToggle": document.getElementById("whitePiecesToggle").checked,
-    "blackPiecesToggle": document.getElementById("blackPiecesToggle").checked,
-    "moveHelper": document.getElementById("moveHelper").checked,
-    "sneakyMode": document.getElementById("sneakyMode").checked,
-    "constantRotations": document.getElementById("constantRotations").checked,
-    "kingAndQueen": document.getElementById("kingAndQueen").checked,
-    "bongcloud": document.getElementById("bongcloud").checked,
-    "distractions": document.getElementById("distractions").checked
+  if(isGameMode(event.target) && event.target.checked) {
+    setGameMode(event.target);
   }
+
+  const settings = getSettingsValues();
 
   chrome.storage.sync.set({'settings': settings}, () => {
     console.log("Updated user settings");
@@ -91,7 +133,9 @@ document.getElementById("settingsMenu").addEventListener('change', event => {
 document.getElementById("chessConfuser").addEventListener('change', event => {
   let value = document.getElementById("chessConfuser").checked;
 
-  sendMessage(value == true ? null : 1);
+  if(!value) {
+    sendMessage(1);
+  }
 });
 
 /**
@@ -100,7 +144,7 @@ document.getElementById("chessConfuser").addEventListener('change', event => {
  */
 document.getElementById("scrambler").addEventListener('click', event => {
   sendMessage(0);
-})
+});
 
 /**
  * Adds an event listener to check if the uses clicks the reset
@@ -108,7 +152,7 @@ document.getElementById("scrambler").addEventListener('click', event => {
  */
 document.getElementById("reset").addEventListener('click', event => {
   sendMessage(1);
-})
+});
 
 /**
  * Adds an event listener to check whether the move helper textbox
@@ -118,4 +162,4 @@ document.getElementById("moveHelper").addEventListener('change', event => {
   let value = document.getElementById("moveHelper").checked;
 
   sendMessage(value == true ? 2 : 3);
-})
+});

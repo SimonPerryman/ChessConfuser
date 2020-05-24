@@ -72,6 +72,24 @@ const bongcloud = pieces => {
   }
 }
 
+const kingAndQueen = pieces => {
+  let king, queen;
+  const colour = pieces[0].colour == 0 ? "w" : "b";
+  if(location.pathname == "/play/computer") {
+    king = `${pieces[0].src.slice(0, -6)}${colour}k.png`;
+    queen = `${pieces[0].src.slice(0, -6)}${colour}q.png`;
+    for(piece of pieces) {
+      piece.src = Math.floor(Math.random() * 2) == 0 ? king : queen;
+    }
+  } else {
+    king = `${pieces[0].style.backgroundImage.slice(0, -8)}${colour}k.png")`;
+    queen = `${pieces[0].style.backgroundImage.slice(0, -8)}${colour}q.png")`;
+    for(piece of pieces) {
+      piece.style.backgroundImage = Math.floor(Math.random() * 2) == 0 ? king : queen;
+    }
+  }
+}
+
 /**
  * legalMoveRemover - removes the legal move hints
  */
@@ -185,7 +203,7 @@ const splitPieces = pieces => {
  * chessConfuser (Main Function) - visually scrambles the board to confuse the player.
  * @param {object} settings 
  */
-const chessConfuser = (settings) => {
+const chessConfuser = settings => {
   let pieces;
   if(location.pathname == "/play/computer") {
     pieces = document.getElementsByClassName("chess_com_piece");
@@ -202,6 +220,7 @@ const chessConfuser = (settings) => {
     
     let gameMode;
     if(settings.bongcloud) gameMode = bongcloud;
+    else if(settings.kingAndQueen) gameMode = kingAndQueen;
     else gameMode = randomisePieces;
 
     //Randomise whites pieces
@@ -261,16 +280,18 @@ const getOriginalImage = piece => {
  * Visually resets the board
  */
 const reset = () => {
-  let pieces;
-  if(location.pathname == "/play/computer") {
-    pieces = document.getElementsByClassName("chess_com_piece");
-  } else {
-    pieces = document.getElementsByClassName("piece");
-  }
+    let pieces;
+    if(location.pathname == "/play/computer") {
+      pieces = document.getElementsByClassName("chess_com_piece");
+    } else {
+      pieces = document.getElementsByClassName("piece");
+    }
 
-  for(piece of pieces) {
-    piece = getOriginalImage(piece)
-  }
+    if(pieces[0].pieceId != undefined) {
+      for(piece of pieces) {
+        piece = getOriginalImage(piece)
+      }
+    }
 }
 
 /**
