@@ -174,7 +174,7 @@ const chessConfuser = (settings) => {
     pieces = document.getElementsByClassName("piece");
   }
 
-  if(pieces && pieces.length > 1 && pieces[0].pieceId == undefined) {
+  if(pieces && pieces.length > 0 && pieces[0].pieceId == undefined) {
     pieces = assignPieceInfo(pieces);
   }
 
