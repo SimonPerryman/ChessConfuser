@@ -174,7 +174,9 @@ const chessConfuser = (settings) => {
     pieces = document.getElementsByClassName("piece");
   }
 
-  pieces = assignPieceInfo(pieces);
+  if(pieces && pieces.length > 0 && pieces[0].pieceId == undefined) {
+    pieces = assignPieceInfo(pieces);
+  }
 
   if(settings.whitePiecesToggle || settings.blackPiecesToggle) {
     pieces = splitPieces(pieces);
@@ -245,8 +247,10 @@ const reset = () => {
     pieces = document.getElementsByClassName("piece");
   }
 
-  for(piece of pieces) {
-    piece = getOriginalImage(piece)
+  if(pieces && pieces[0].pieceId != undefined) {
+    for(piece of pieces) {
+      piece = getOriginalImage(piece)
+    }
   }
 }
 
