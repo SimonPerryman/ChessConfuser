@@ -2,10 +2,17 @@
   "manifest_version": 2,
   "name": "Chess Confuser",
   "version": "1.0",
-  "description": "Visually scrambles your chess board on chess.com",
+  "description": "Visually scrambles your chess board on chess.com.",
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "author": "Simon Perryman",
-  "homepage_url": "https://github.com/SimonPerryman/FYP",
-  "permissions": ["tabs", "storage"],
+  "browser_action": {
+    "default_icon": "logo.png",
+    "default_popup": "menu/menu.html",
+    "default_title": "Chess Confuser\nClick to open the settings menu"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -23,9 +30,10 @@
       "js": ["content.js"]
     }
   ],
-  "browser_action": {
-    "default_icon": "logo.png",
-    "default_popup": "menu/menu.html",
-    "default_title": "Chess Confuser\nClick to open the settings menu"
-  }
+  "homepage_url": "https://github.com/SimonPerryman/ChessConfuser",
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "version_name": "release"
 }
